@@ -1,0 +1,7 @@
+data
+tests
+deploy
+.env
+.git
+*.md
+node_modules

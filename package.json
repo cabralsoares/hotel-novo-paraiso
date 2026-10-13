@@ -1,0 +1,13 @@
+{
+  "name": "hotel-novo-paraiso",
+  "version": "2.0.0",
+  "description": "Sistema de check-in e hospedagem do Hotel e Pousada Novo Paraíso (Caaporã-PB), com banco de dados próprio",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node tests/run.js && node --test tests/api.test.js",
+    "restaurar": "node server/restore.js"
+  }
+}

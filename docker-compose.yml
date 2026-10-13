@@ -1,0 +1,28 @@
+# Sobe o sistema do hotel com banco de dados PRÓPRIO (volume "hotel-data").
+#   docker compose up -d --build
+services:
+  hotel:
+    build: .
+    image: hotel-novo-paraiso:latest
+    container_name: hotel-novo-paraiso
+    restart: unless-stopped
+    ports:
+      # Só a própria VPS enxerga esta porta. O OpenResty/Nginx faz a ponte com a internet.
+      # NUNCA troque por "3100:3100": o sistema confia nos cabeçalhos do proxy (TRUST_PROXY=1).
+      - "127.0.0.1:3100:3100"
+    environment:
+      HOTEL_TZ: America/Recife
+      TRUST_PROXY: "1"
+      COOKIE_SECURE: "1"      # o site é acessado por HTTPS; use "0" só para testar por http em outro aparelho
+    volumes:
+      - hotel-data:/data      # hotel.db, backups diários e o código de primeiro acesso
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp
+
+volumes:
+  hotel-data:

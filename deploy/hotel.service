@@ -1,0 +1,27 @@
+# Alternativa ao Docker: serviço systemd (precisa de Node 22.13+ instalado na VPS).
+#   sudo cp deploy/hotel.service /etc/systemd/system/hotel.service
+#   sudo systemctl daemon-reload && sudo systemctl enable --now hotel
+[Unit]
+Description=Hotel e Pousada Novo Paraiso
+After=network.target
+
+[Service]
+Type=simple
+User=hotel
+Group=hotel
+WorkingDirectory=/opt/hotel-novo-paraiso
+EnvironmentFile=/opt/hotel-novo-paraiso/.env
+Environment=NODE_OPTIONS=--disable-warning=ExperimentalWarning
+ExecStart=/usr/bin/node server/server.js
+Restart=always
+RestartSec=3
+
+# endurecimento: o serviço só escreve na pasta do banco
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/hotel-novo-paraiso/data
+
+[Install]
+WantedBy=multi-user.target
